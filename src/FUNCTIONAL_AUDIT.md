@@ -78,10 +78,10 @@
 
 | Issue | File | Severity |
 |-------|------|----------|
-| **`VITE_SUPABASE_URL` is set to the Supabase dashboard URL** — value is `https://supabase.com/dashboard/project/pjpvbdnlckwezrgujjqm` instead of the correct API endpoint `https://pjpvbdnlckwezrgujjqm.supabase.co`. The Supabase client will fail to connect. | `.env` | CRITICAL |
-| **`VITE_SUPABASE_ANON_KEY` uses non-JWT format** — value `sb_publishable_ZOvDGLgrzmeoH17loslPIQ_uulxvBTZ` is not a standard Supabase anon key (which is a base64-encoded JWT beginning with `eyJ...`). This key will not authenticate with the Supabase API. | `.env` | CRITICAL |
-| **Supabase client will silently fail** — `src/lib/supabase.js` calls `createClient()` with the above invalid URL/key. Any `.from()` or `.rpc()` call will throw a network/ auth error. Pages that depend on these queries (Home, BrowseMajalis) will show empty states. | `src/lib/supabase.js` | CRITICAL |
-| **`database.env` file present but unused** — file `database.env` exists in the project root but is not loaded by Vite or referenced anywhere. Its purpose is unclear. | `database.env` | LOW |
+| **`VITE_SUPABASE_URL` is set to the Supabase dashboard URL** — value is `https://supabase.com/dashboard/project/pjpvbdnlckwezrgujjqm` instead of the correct API endpoint `https://<project-ref>.supabase.co`. `createClient()` accepts this URL without throwing and derives the REST base `https://supabase.com/dashboard/project/<ref>/rest/v1`, so every query is sent to the marketing site instead of PostgREST. **This is the actual root cause of the connection failure.** *(RESOLVED in code: `src/lib/supabase.js` now rejects dashboard URLs with an actionable error. The real URL still has to be supplied by the developer — see note below.)* | `.env` | CRITICAL |
+| ~~**`VITE_SUPABASE_ANON_KEY` uses non-JWT format**~~ — **RETRACTED, this finding was incorrect.** The original claim was that an `sb_publishable_...` key "is not a standard Supabase anon key" and "will not authenticate". `sb_publishable_` is Supabase's *current* publishable-key format, and `@supabase/supabase-js@2.108.2` forwards the key verbatim as the `apikey` header with no format validation. Both the publishable key and the legacy `eyJ...` anon JWT are accepted. **No key change is required.** | `.env` | ~~CRITICAL~~ (retracted) |
+| **Supabase client will silently fail** — `src/lib/supabase.js` passed the bad URL straight to `createClient()`, which does not validate it, so failures surfaced only as confusing per-query errors on Home/BrowseMajalis/BrowseJaloos. *(RESOLVED: config is now validated at module load with a descriptive error.)* | `src/lib/supabase.js` | CRITICAL |
+| **`database.env` file present but unused** — not loaded by Vite and referenced nowhere; it only duplicates the credentials also present in `.env`. *(RESOLVED: now gitignored via the `*.env` rule so it cannot be committed.)* | `database.env` | LOW |
 | **Hardcoded theme tokens in components** — several components use raw hex values (`#0A0A0A`, `#8b0000`, `#2A2A2A`) instead of Tailwind CSS theme variables (`bg-background`, `text-primary`, `border-outline-variant`). | Multiple components | MEDIUM |
 | **`index.html` has placeholder title** — `<title>majalis-pk</title>` should be `<title>Majalis.pk - Find Majalis Near You</title>` or similar for SEO. | `index.html` | LOW |
 | **No meta tags in `index.html`** — missing `description`, `og:title`, `og:description`, `og:image`, and `twitter:card` meta tags. Zero SEO meta. | `index.html` | MEDIUM |
@@ -102,6 +102,8 @@
 | Environment & Config | 3 | 1 | 2 | 3 |
 | **Total** | **3** | **14** | **12** | **12** |
 
-**Critical findings all stem from the `.env` file:** the Supabase URL is a dashboard link and the anon key is non-standard. Until these are corrected, every Supabase-backed feature silently fails.
+**Critical findings all stem from the `.env` file.** After investigation the picture narrowed to a single genuine root cause: `VITE_SUPABASE_URL` was a dashboard link, so all Supabase traffic was aimed at the wrong host. The reported "non-JWT anon key" problem was investigated and **retracted** — the publishable-key format is valid for this client version.
+
+Additionally, the project ref referenced by both env files (`pjpvbdnlckwezrgujjqm`) does not resolve: a DNS-over-HTTPS lookup of `<ref>.supabase.co` returns NXDOMAIN while `supabase.com` resolves normally, so that project is deleted/paused or the ref is wrong. **The developer must supply a real project URL and key in a local `.env`; no Supabase-backed feature can work until they do.**
 
 **14 High-severity findings** — dominated by hardcoded mock data (5 pages), client-side-only form submissions (3 forms), location not persisted, localStorage-only settings, browser compatibility risk for Hijri dates, and incomplete navigation on mobile.

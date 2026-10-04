@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #8b0000;
+  --color-primary-container: #8b0000;
+  --color-on-primary: #690000;
+  --color-on-primary-container: #ff907f;
+  --color-primary-fixed: #ffdad4;
+  --color-primary-fixed-dim: #ffb4a8;
+  --color-secondary: #a5d0b9;
+  --color-secondary-container: #29513f;
+  --color-secondary-fixed: #c1ecd4;
+  --color-secondary-fixed-dim: #a5d0b9;
+  --color-tertiary: #4ae176;
+  --color-tertiary-container: #004e1f;
+  --color-tertiary-fixed: #6bff8f;
+  --color-tertiary-fixed-dim: #4ae176;
+  --color-background: #0A0A0A;
+  --color-surface: #121414;
+  --color-surface-dim: #121414;
+  --color-surface-bright: #383939;
+  --color-surface-container-lowest: #0d0e0f;
+  --color-surface-container-low: #1a1c1c;
+  --color-surface-container: #1e2020;
+  --color-surface-container-high: #292a2a;
+  --color-surface-container-highest: #343535;
+  --color-on-surface: #e3e2e2;
+  --color-on-surface-variant: #e3beb8;
+  --color-outline: #aa8984;
+  --color-outline-variant: #2A2A2A;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+  --color-inverse-surface: #e3e2e2;
+  --color-inverse-on-surface: #2f3131;
+  --color-inverse-primary: #b52619;
+
+  --font-h1: "Inter", sans-serif;
+  --font-h2: "Inter", sans-serif;
+  --font-h3: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-caption: "Inter", sans-serif;
+  --font-label-md: "Inter", sans-serif;
+
+  --font-size-h1: 48px;
+  --font-size-h1-mobile: 32px;
+  --font-size-h2: 32px;
+  --font-size-h2-mobile: 24px;
+  --font-size-h3: 24px;
+  --font-size-body: 16px;
+  --font-size-label-md: 13px;
+  --font-size-caption: 11px;
+}
+
+/* Custom Styles */
+body {
+  background-color: #0A0A0A;
+  color: #e3e2e2;
+  font-family: 'Inter', sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0d0e0f;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2A2A2A;
+  border-radius: 10px;
+}
+
+.ashura-glow {
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.4);
+}
+
+.glass-card {
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.glass-panel {
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid #2A2A2A;
+}
+
+.premium-card {
+  background: #1A1A1A;
+  border: 1px solid #2A2A2A;
+  transition: border-color 0.3s ease;
+}
+.premium-card:hover {
+  border-color: #5a403c;
+}
+
+.tonal-card {
+  background: #1A1A1A;
+  transition: all 0.3s ease;
+}
+.tonal-card:hover {
+  background: #222222;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+}
+
+.tonal-layer-1 { background-color: #1A1A1A; }
+.tonal-layer-2 { background-color: #222222; }
+
+.divider { background-color: #2A2A2A; height: 1px; width: 100%; }
+
+.gold-badge-glow {
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+}
+
+.calendar-active-dot {
+  box-shadow: 0 0 10px rgba(74, 225, 118, 0.6);
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
